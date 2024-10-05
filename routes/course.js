@@ -7,7 +7,7 @@ courseRouter.get('/preview', (req, res)=>{
    });
 });
 
-courseRouter.post('/purchase', userMiddleware, (req, res)=>{
+courseRouter.post('/purchase', (req, res)=>{
     res.json({
         message: "Course Purchased Successfully"
     });

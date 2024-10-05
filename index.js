@@ -1,5 +1,5 @@
+require('dotenv').config()
 const express = require("express");
-const JWT = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const userRouter = require("./routes/user");
 const courseRouter = require("./routes/course");
@@ -12,6 +12,10 @@ app.use('/user', userRouter);
 app.use('/course', courseRouter);
 app.use('/admin', adminRouter);
 
-app.listen(3000, () => {
-    console.log("listening on 3000");
-});
+async function main() {
+    await mongoose.connect(process.env.MONGO_URI);
+    app.listen(3000, () => {
+        console.log("Listening on port 3000");
+    });
+}
+main();
