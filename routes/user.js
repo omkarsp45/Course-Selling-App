@@ -4,12 +4,12 @@ const userMiddleware = require('../middlewares/userMiddleware.js');
 const bcrypt = require('bcrypt');
 const saltrounds = 10;
 const jwt = require('jsonwebtoken');
-const schema = require('../zod.js');
+const { signUpSchema, loginSchema } = require('../zod.js');
 const { userModel } = require('../db');
 
 userRouter.post('/sign-up', async (req, res) => {
     try {
-        const { email, password, firstName, lastName } = schema.parse(req.body);
+        const { email, password, firstName, lastName } = signUpSchema.parse(req.body);
         const salt = await bcrypt.genSalt(saltrounds);
         const hashedPassword = await bcrypt.hash(password, salt);
         await userModel.create({ email, password: hashedPassword, firstName, lastName });
@@ -25,7 +25,7 @@ userRouter.post('/sign-up', async (req, res) => {
 
 userRouter.post('/login', async (req, res) => {
     try {
-        const { email, password } = schema.parse(req.body);
+        const { email, password } = loginSchema.parse(req.body);
         const user = await userModel.findOne({ email });
         if (!user) {
             return res.status(400).json({
@@ -50,9 +50,12 @@ userRouter.post('/login', async (req, res) => {
     }
 });
 
-userRouter.get('/my-courses', (req, res) => {
+userRouter.get('/my-courses', userMiddleware, async (req, res) => {
+    const userId = req.userId;
+    const courses = await userModel.findOne({ _id: userId}).populate('purchasedCourses');
     res.json({
-        message: "All Courses"
+        message: "My Courses",
+        courses
     });
 });
 
