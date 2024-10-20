@@ -10,6 +10,12 @@ const { userModel } = require('../db');
 userRouter.post('/sign-up', async (req, res) => {
     try {
         const { email, password, firstName, lastName } = signUpSchema.parse(req.body);
+        const existingUser = await userModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({
+                message: "Email Already Exists"
+            });
+        }
         const salt = await bcrypt.genSalt(saltrounds);
         const hashedPassword = await bcrypt.hash(password, salt);
         await userModel.create({ email, password: hashedPassword, firstName, lastName });
@@ -52,7 +58,7 @@ userRouter.post('/login', async (req, res) => {
 
 userRouter.get('/my-courses', userMiddleware, async (req, res) => {
     const userId = req.userId;
-    const courses = await userModel.findOne({ _id: userId}).populate('purchasedCourses');
+    const courses = await userModel.find({ _id: userId });
     res.json({
         message: "My Courses",
         courses
