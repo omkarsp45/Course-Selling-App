@@ -59,8 +59,14 @@ adminRouter.post('/login', async (req, res) => {
 adminRouter.post('/course', adminMiddleware, async (req, res) => {
     const adminId = req.adminId;
     const { title, description, price, imageUrl } = req.body;
+    const existingCourse = await courseModel.findOne({ name: title });
+    if (existingCourse) {
+        return res.status(400).json({
+            message: "Course Already Exists"
+        });
+    }
     await courseModel.create({
-        name : title,
+        name: title,
         description,
         price,
         imageUrl,
@@ -72,8 +78,8 @@ adminRouter.post('/course', adminMiddleware, async (req, res) => {
 adminRouter.put('/course', adminMiddleware, async (req, res) => {
     const adminId = req.adminId;
     const { title, description, price, imageUrl } = req.body;
-    await courseModel.updateOne({ creatorId: adminId , name: title}, {
-        name : title,
+    await courseModel.updateOne({ creatorId: adminId, name: title }, {
+        name: title,
         description,
         price,
         imageUrl,
@@ -84,7 +90,7 @@ adminRouter.put('/course', adminMiddleware, async (req, res) => {
 
 adminRouter.get('/my-courses', adminMiddleware, async (req, res) => {
     const adminId = req.adminId;
-    const courses = await courseModel.find({ _id: adminId });
+    const courses = await courseModel.find({ creatorId: adminId });
     res.json({ courses });
 });
 

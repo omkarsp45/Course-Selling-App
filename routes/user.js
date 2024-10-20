@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const saltrounds = 10;
 const jwt = require('jsonwebtoken');
 const { signUpSchema, loginSchema } = require('../zod.js');
-const { userModel } = require('../db');
+const { userModel, courseModel, purchaseModel } = require('../db');
 
 userRouter.post('/sign-up', async (req, res) => {
     try {
@@ -58,7 +58,7 @@ userRouter.post('/login', async (req, res) => {
 
 userRouter.get('/my-courses', userMiddleware, async (req, res) => {
     const userId = req.userId;
-    const courses = await userModel.find({ _id: userId });
+    const courses = await purchaseModel.find({ userId: userId });
     res.json({
         message: "My Courses",
         courses

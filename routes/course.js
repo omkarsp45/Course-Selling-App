@@ -1,22 +1,23 @@
 const express = require('express');
 const userMiddleware = require('../middlewares/userMiddleware');
-const { courseModel } = require('../db');
+const { courseModel, purchaseModel } = require('../db');
 const courseRouter = express.Router();
 
-courseRouter.get('/preview', (req, res)=>{
-    // all courses
-    courseModel.find({}, (err, courses)=>{
-        if(err){
-            res.json({ message: "Something went wrong" });
-        }
-        res.json({ courses });
-    })
+courseRouter.get('/preview', async (req, res) => {
+    const courses = await courseModel.find({});
+    res.json({ courses });
 });
 
-courseRouter.post('/purchase', userMiddleware, async(req, res)=>{
+courseRouter.post('/purchase', userMiddleware, async (req, res) => {
     const userId = req.userId;
     const { courseId } = req.body;
-    await userModel.updateOne({ _id: userId }, { $push: { purchasedCourses: courseId } });
+    const existingPurchase = await purchaseModel.findOne({ userId, courseId });
+    if (existingPurchase) {
+        return res.status(400).json({
+            message: "Already Purchased"
+        });
+    }
+    await purchaseModel.create({ userId, courseId });
     res.json({ message: "Course Purchased Successfully" });
 });
 
