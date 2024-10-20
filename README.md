@@ -1,19 +1,48 @@
-## Create a course selling app
+# Course Selling App
 
- - Initialize a new Node.js project
- - Add Express, jsonwebtoken, mongoose to it as a dependency 
- - Create index.js
- - Add route skeleton for user login, signup, purchase a course, sees all courses, sees the purchased courses course
- - Add routes for admin login, admin signup, create a course, delete a course, add course content.
- - Define the schema for User, Admin, Course, Purchase
- - Add a database (mongodb), use dotenv to store the database connection string
- - Add middlewares for user and admin auth
- - Complete the routes for user login, signup, purchase a course, see course (Extra points - Use express routing to better structure your routes)
- - Create the frontend
+## Overview
 
+This is a course-selling application backend built using Node.js, Express, Mongoose, and MongoDB. The backend handles user authentication, course management, and purchases.
 
-### Good to haves
-  - Use cookies instead of JWT for auth
-  - Add a rate limiting middleware
-  - Frontend in ejs (low pri)
-  - Frontend in React
+The application provides:
+- User registration and login
+- Admin registration and login
+- Course creation by admins
+- Course purchase and viewing functionality for users
+- Separate routes for users and admins
+
+## Features
+- User signup and login
+- Admin signup and login
+- Users can view all available courses and purchase courses
+- Admins can create and manage courses
+- Middleware for authentication and authorization
+- MongoDB database integration
+- Environment variable management using `dotenv`
+
+## Installation
+
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/your-username/course-selling-app.git
+    cd course-selling-app
+    ```
+
+2. **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+3. **Set up environment variables**:
+    Create a `.env` file in the root directory of the project with the following contents:
+    ```bash
+    MONGO_URI=your_mongodb_connection_string
+    JWT_USER_PASSWORD = your_password
+    JWT_ADMIN_PASSWORD = your_password
+    ```
+
+4. **Start the server**:
+    ```bash
+    node index.js
+    ```
+   The server will start at `http://localhost:3000`.
