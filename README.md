@@ -24,7 +24,7 @@ The application provides:
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/your-username/course-selling-app.git
+    git clone https://github.com/omkarsp45/course-selling-app.git
     cd course-selling-app
     ```
 
